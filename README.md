@@ -1,8 +1,8 @@
 # Changeful
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/changeful`. To experiment with that code, run `bin/console` for an interactive prompt.
+Do you need to allow your administrator to edit the static content of your views?
 
-TODO: Delete this and the text above, and describe your gem
+Changeful is a gem that converts your static content in your views to be stored into database. Thereafter, administrator can use RailsAdmin or Active Admin to edit the static content.
 
 ## Installation
 
@@ -14,28 +14,138 @@ gem 'changeful'
 
 And then execute:
 
-    $ bundle
+```ruby
+$ bundle install
+```
 
 Or install it yourself as:
 
-    $ gem install changeful
+```ruby
+$ gem install changeful
+```
+
+After you install Changeful to your Gemfile, you need to run the generator:
+
+```ruby
+rails generate changeful:install
+```
+
+This will generate the migration needed for Changeful
+
+Run the migration to update the schema
+
+```ruby
+rake db:migrate
+```
 
 ## Usage
 
-TODO: Write usage instructions here
+### ERB
+```ruby
+<h1><%= changeful_content(:about_us_title) %></h1>
 
-## Development
+<div class='about-us-content'>
+  <%= changeful_content :about_us_content do %>
+    <p>You can also include HTML content as the default content in a block.</p>
+    <div class='more-content'>Nested tags are also okay.</div>
+  <% end %>
+</div>
+```
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+### HAML
+```ruby
+%h1= changeful_content(:about_us_title)
+.about-us-content
+  = changeful_content :about_us_content do
+    %p You can also include HTML content as the default content in a block.
+    .more-content Nested tags are also okay.
+```
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+### Slim
+```ruby
+h1 = changeful_content(:about_us_title)
 
+.about-us-content
+  = changeful_content :about_us_content do
+    p You can also include HTML content as the default content in a block.
+    .more-content Nested tags are also okay.
+```
+
+The view helper method `changeful_content` will return the content found in Changeful database. You can also set a default if there is no content found.
+
+## Available Options
+
+Key | Accepted Values | What it does
+---|---|--- 
+`default` | String | It sets the default content to return if the key is not found in database
+`type` | `:plain`, `:html` | It tells backend gems to display the correct input field in the backend
+
+## More Examples
+
+```ruby
+# In your views
+changeful_content(:about_us_title)
+changeful_content(:about_us_title, default: 'About Us')
+changeful_content(:about_us_title, default: 'About Us', type: :plain) 
+
+# Or you can use the shorter method alias cc
+cc :about_us_title
+cc :about_us_title, default: 'About Us'
+cc :about_us_title, default: 'About Us', type: :plain
+```
+
+## Integration with back-end
+
+### ActiveAdmin
+Currently it only work well with ActiveAdmin
+
+Register the model with ActiveAdmin
+
+```ruby
+rails g active_admin:resource Changeful::Content
+``` 
+
+By default it will create `changeful_content.rb` in `app/admin` folder
+
+#### Configuration for ActiveAdmin
+
+Copy the setup below to `changeful_content.rb`
+
+Note: the example below is using `ckeditor` gem, replace the editor accordingly.
+
+```ruby
+ActiveAdmin.register Changeful::Content do
+  permit_params :content
+
+  index do
+    selectable_column
+    id_column
+    column :key, ->(row) { row.key.titleize  }
+    column :content
+    column :updated_at
+    actions
+  end
+
+  form do |f|
+    f.inputs 'Details' do
+      input :key, input_html: { disabled: true  }
+      if f.object.view_type == 'html'
+        input :content, as: :ckeditor
+      else
+        input :content
+      end
+    end
+    actions
+  end
+end
+```
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/changeful. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](contributor-covenant.org) code of conduct.
-
+1. Fork it ( https://github.com/futureworkz/changeful/fork   )
+2. Create your feature branch (`git checkout -b my-new-feature`)
+3. Commit your changes (`git commit -am 'Add some feature'`)
+4. Push to the branch (`git push origin my-new-feature`)
+5. Create a new Pull Request
 
 ## License
-
-The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
-
+Changeful is Copyright © 2015 Futureworkz Pte Ltd. It is free software, and may be redistributed under the terms specified in the MIT-LICENSE file.
