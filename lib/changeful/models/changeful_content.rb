@@ -6,5 +6,7 @@ module Changeful
 
     validates :key, :content, :view_type, :file_path, presence: true
     validates :key, uniqueness: { scope: :file_path }
+
+    scope :all_contents_in, ->(current_view) { where('file_path = ?', current_view) }
   end
 end
