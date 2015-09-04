@@ -26,8 +26,18 @@ module Changeful
     # 
     # @return [String] a content based on a key
     def changeful_content(key, options = {})
-      data = Content.find_by(key: key)
-      return raw(data.content) if data.present?
+      data ||= Content.all
+      data_record = ''
+
+      if data.present?
+        data.each do |datum|
+          if datum.key == key.to_s
+            data_record = datum
+          end
+        end
+      end
+
+      return raw(data_record.content) if data_record.present?
 
       view_type = options.delete(:type) || :plain
       content = options.delete(:default) || capture(&proc)

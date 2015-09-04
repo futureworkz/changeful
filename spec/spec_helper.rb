@@ -11,6 +11,7 @@ ActiveRecord::Schema.define do
     t.string   "key"
     t.text     "content"
     t.string   "view_type"
+    t.string   "file_path"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
