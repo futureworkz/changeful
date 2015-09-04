@@ -26,26 +26,30 @@ module Changeful
     # 
     # @return [String] a content based on a key
     def changeful_content(key, options = {})
-      data ||= Content.all
-      data_record = ''
+      contents ||= Content.all_contents_in(current_view)
 
-      if data.present?
-        data.each do |datum|
-          if datum.key == key.to_s
-            data_record = datum
-          end
+      if contents.present?
+        contents.each do |datum|
+          return raw(datum.content) if datum.key == key.to_s
         end
       end
 
-      return raw(data_record.content) if data_record.present?
+      content   = options.delete(:default) || capture(&proc)
+      view_type = options.delete(:type)    || :plain
+      Content.create!(key: key, 
+                      content: content, 
+                      view_type: view_type, 
+                      file_path: current_view)
 
-      view_type = options.delete(:type) || :plain
-      content = options.delete(:default) || capture(&proc)
-
-      Content.create!(key: key, content: content, view_type: view_type)
       return content
     end
 
     alias_method :cc, :changeful_content
+
+    private
+
+    def current_view
+      File.basename(File.dirname(__FILE__)) + '/' + File.basename(__FILE__, '.*')
+    end
   end
 end

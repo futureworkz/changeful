@@ -7,6 +7,6 @@ ActiveSupport.on_load(:action_view) do
     include Changeful::ViewHelpers
 end
 
-module Changeful
+module Changeful # :nodoc:
   # Your code goes here...
 end
