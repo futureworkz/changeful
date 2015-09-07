@@ -1,5 +1,5 @@
 # Changeful
-
+[![Gem Version](https://badge.fury.io/rb/changeful.svg)](http://badge.fury.io/rb/changeful)
 [![Build Status](https://travis-ci.org/futureworkz/changeful.svg?branch=master)](https://travis-ci.org/futureworkz/changeful)
 [![Dependency Status](https://gemnasium.com/futureworkz/changeful.svg)](https://gemnasium.com/futureworkz/changeful)
 [![Code Climate](https://codeclimate.com/github/futureworkz/changeful/badges/gpa.svg)](https://codeclimate.com/github/futureworkz/changeful)
