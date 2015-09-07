@@ -9,7 +9,7 @@ describe Changeful::Generators::InstallGenerator, type: :generator do
     run_generator
   end
 
-  it ' all files created properly ' do
+  it 'migration file created properly' do
     assert_migration 'db/migrate/create_changeful_contents.rb', /def change/
   end
 end
