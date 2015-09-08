@@ -21,36 +21,35 @@ gem 'changeful'
 
 And then execute:
 
-```ruby
+```
 $ bundle install
 ```
 
 Or install it yourself as:
 
-```ruby
+```
 $ gem install changeful
 ```
 
 After you install Changeful to your Gemfile, you need to run the generator:
 
-```ruby
-rails generate changeful:install
+```
+$ rails generate changeful:install
 ```
 
 This will generate the migration needed for Changeful
 
 Run the migration to update the schema
 
-```ruby
-rake db:migrate
+```
+$ rake db:migrate
 ```
 
 ## Usage
 
 ### ERB
-```ruby
+```erb
 <h1><%= changeful_content(:about_us_title) %></h1>
-
 <div class='about-us-content'>
   <%= changeful_content :about_us_content do %>
     <p>You can also include HTML content as the default content in a block.</p>
@@ -60,7 +59,7 @@ rake db:migrate
 ```
 
 ### HAML
-```ruby
+```haml
 %h1= changeful_content(:about_us_title)
 .about-us-content
   = changeful_content :about_us_content do
@@ -69,9 +68,8 @@ rake db:migrate
 ```
 
 ### Slim
-```ruby
+```slim
 h1 = changeful_content(:about_us_title)
-
 .about-us-content
   = changeful_content :about_us_content do
     p You can also include HTML content as the default content in a block.
@@ -104,59 +102,17 @@ cc :about_us_title, default: 'About Us', type: :plain
 ## Integration with back-end
 
 ### ActiveAdmin
-Currently it only work well with ActiveAdmin
 
-Register the model with ActiveAdmin
+Run the following CLI to generate the model
 
-```ruby
-rails g active_admin:resource Changeful::Content
+```
+$ rails generate changeful:models:active_admin
 ``` 
 
-By default it will create `changeful_content.rb` in `app/admin` folder
+By default it will create `changeful_content.rb` in `app/admin` folder with the default configuration.
 
-#### Configuration for ActiveAdmin
+Note: The default configuration for text editor assumes you are using the `ckeditor` gem, replace the editor accordingly.
 
-Copy the setup below to `changeful_content.rb`
-
-Note: the example below is using `ckeditor` gem, replace the editor accordingly.
-
-```ruby
-ActiveAdmin.register Changeful::Content do
-  permit_params :content
-  actions :all, except: [:new]
-
-  index do
-    selectable_column
-    id_column
-    column :key, ->(row) { row.key.titleize  }
-    column :content
-    column :updated_at
-    actions
-  end
-
-  show do
-    attributes_table do
-      row :id
-      row :file_path
-      row :key
-      row :content
-      row :updated_at
-    end
-  end
-
-  form do |f|
-    f.inputs 'Details' do
-      input :key, input_html: { disabled: true  }
-      if f.object.view_type == 'html'
-        input :content, as: :ckeditor
-      else
-        input :content
-      end
-    end
-    actions
-  end
-end
-```
 ## Contributing
 
 1. Fork it ( https://github.com/futureworkz/changeful/fork   )
