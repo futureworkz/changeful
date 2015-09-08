@@ -1,4 +1,4 @@
-class CreateChangefulContents < ActiveRecord::Migration # :nodoc:
+class CreateChangefulContents < ActiveRecord::Migration
   def change
     create_table :changeful_contents do |t|
       t.string :key
