@@ -6,7 +6,7 @@ require 'changeful/version'
 Gem::Specification.new do |spec|
   spec.name          = 'changeful'
   spec.version       = Changeful::VERSION
-  spec.authors       = ['Wayne Tng']
+  spec.authors       = ['Wayne Tng', 'Steven Yap']
   spec.email         = ['wayne@futureworkz.com']
 
   spec.summary       = %q{Make your static contents editable in database}
