@@ -35,7 +35,7 @@ RSpec.describe Changeful::ViewHelpers, type: :helper do
         def output_buffer; end
         def output_buffer=(a); end
       end
-      let(:content) { "<table><tr><td> hello </td></tr></table>" }
+      let(:content) { '<table><tr><td> hello </td></tr></table>' }
 
       it 'Saves the block as content' do
         result = changeful_content(:about_us_content) { content }

@@ -102,7 +102,6 @@ cc :about_us_title, default: 'About Us', type: :plain
 ## Integration with back-end
 
 ### ActiveAdmin
-
 Run the following CLI to generate the model
 
 ```
@@ -112,6 +111,61 @@ $ rails generate changeful:models:active_admin
 By default it will create `changeful_content.rb` in `app/admin` folder with the default configuration.
 
 Note: The default configuration for text editor assumes you are using the `ckeditor` gem, replace the editor accordingly.
+
+
+### Rails Admin
+There are two approaches to set up rails admin.
+
+To include the ALL models manually.
+
+```ruby
+# config/initializers/rails_admin.rb
+
+config.included_models = ["Changeful::Content", "YourOwnModel", "YourAnotherModel" ]
+```
+
+OR you can run the following CLI to generate the model.
+
+```
+$ rails generate changeful:models:rails_admin
+```
+
+This will generate `changeful_content.rb` in `app/model` with the default configuration for rails admin.
+
+Note: The default configuration for text editor assumes you are using the `ckeditor` gem, replace the editor accordingly.
+
+In the case where default configuration is not needed, run the following CLI.
+
+```
+$ rails generate changeful:model
+```
+
+This will generate a fresh `changeful_content.rb` in `app/model`
+
+#### Additional Configuration for Rails Admin
+You may wish to deactivate `create` to prevent users from creating records in changeful content.
+
+`destroy` is optional, if the admin delete the record, the `default` option will be trigger and re-create the content accordingly.
+
+```ruby
+# config/initializers/rails_admin.rb
+
+config.actions do
+  dashboard                     # mandatory
+  index                         # mandatory
+  new do
+    except ['ChangefulContent']
+  end
+  export
+  bulk_delete
+  show
+  edit
+  delete do
+    except ['ChangefulContent']
+  end
+  show_in_app
+end
+```
 
 ## Contributing
 
