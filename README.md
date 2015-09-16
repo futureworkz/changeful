@@ -123,3 +123,8 @@ Note: The default configuration for text editor assumes you are using the `ckedi
 
 ## License
 Changeful is Copyright © 2015 Futureworkz Pte Ltd. It is free software, and may be redistributed under the terms specified in the MIT-LICENSE file.
+
+## About Futureworkz
+<a href='http://www.futureworkz.com' title='Futureworkz - Ruby on Rails development' target='_blank'><img src='https://s3-ap-southeast-1.amazonaws.com/futureworkz/3rd-party/logo.png' alt='Futureworkz - Ruby on Rails development'/></a>
+
+Changeful is maintained by <a href='http://www.futureworkz.com' title='Futureworkz - Ruby on Rails development' target='_blank'> Futureworkz </a>.
