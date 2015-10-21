@@ -26,7 +26,7 @@ module Changeful
     # 
     # @return [String] a content based on a key
     def changeful_content(key, options = {})
-      contents ||= Content.all_contents_in(current_view)
+      current_view.present? ? contents ||= Content.all_contents_in(current_view) : raise 
 
       if contents.present?
         contents.each do |datum|
@@ -49,7 +49,11 @@ module Changeful
     private
 
     def current_view
-      File.basename(File.dirname(__FILE__)) + '/' + File.basename(__FILE__, '.*')
+      caller.each do |stack|
+        if stack.include?('/views/')
+          return stack[/\/views\/[^.]+/].sub '/views/', ''
+        end
+      end
     end
   end
 end
