@@ -26,7 +26,7 @@ module Changeful
     # 
     # @return [String] a content based on a key
     def changeful_content(key, options = {})
-      current_view.present? ? contents ||= Content.all_contents_in(current_view) : raise 
+      current_view.present? ? contents ||= Content.all_contents_in(current_view) : raise("Missing file_path for loaded page")
 
       if contents.present?
         contents.each do |datum|
@@ -49,11 +49,15 @@ module Changeful
     private
 
     def current_view
+      current_view = false
       caller.each do |stack|
         if stack.include?('/views/')
           return stack[/\/views\/[^.]+/].sub '/views/', ''
+        elsif stack.include?('/changeful/helpers/view_helpers')
+          current_view = stack[/\/helpers\/[^.]+/]
         end
       end
+      current_view if current_view.present?
     end
   end
 end
